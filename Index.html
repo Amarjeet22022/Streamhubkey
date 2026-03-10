@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Key</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #2a2a3a;
+      --accent: #e8c84a;
+      --accent2: #f0a030;
+      --text: #e8e8f0;
+      --muted: #6a6a8a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,200,74,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,200,74,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridScroll 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes gridScroll {
+      0%   { transform: translate(0,0); }
+      100% { transform: translate(40px, 40px); }
+    }
+
+    /* Glowing orb */
+    body::after {
+      content: '';
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(232,200,74,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50%       { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+    }
+
+    .card {
+      position: relative;
+      z-index: 10;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px 48px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(232,200,74,0.06),
+        0 30px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .key-icon {
+      font-size: 52px;
+      display: block;
+      margin-bottom: 24px;
+      animation: swing 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(232,200,74,0.5));
+    }
+
+    @keyframes swing {
+      0%,100% { transform: rotate(-8deg); }
+      50%      { transform: rotate(8deg); }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    .key-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .key-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: scanline 3s ease-in-out infinite;
+    }
+
+    @keyframes scanline {
+      0%,100% { opacity: 0.3; }
+      50%      { opacity: 1; }
+    }
+
+    .key-label {
+      font-size: 0.7rem;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .key-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      word-break: break-all;
+      text-shadow: 0 0 20px rgba(232,200,74,0.4);
+    }
+
+    .copy-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 12px;
+      color: #0a0a0f;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      box-shadow: 0 4px 24px rgba(232,200,74,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(232,200,74,0.4);
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+    }
+
+    .copy-btn.copied {
+      background: linear-gradient(135deg, #4ae870, #30c050);
+      box-shadow: 0 8px 32px rgba(74,232,112,0.4);
+    }
+
+    .copy-btn .btn-text { position: relative; z-index: 1; }
+
+    .note {
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      padding: 12px 16px;
+      border: 1px dashed rgba(255,255,255,0.07);
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+
+    .note strong {
+      color: rgba(232,200,74,0.7);
+    }
+
+    /* No key state */
+    .no-key {
+      text-align: center;
+    }
+
+    .no-key .key-value {
+      font-size: 1rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <span class="key-icon">🗝️</span>
+  <h1>Here's your <span>Key</span></h1>
+  <p class="subtitle">Paste this key to unlock the main page.</p>
+
+  <div class="key-box" id="keyBox">
+    <div class="key-label">Access Key</div>
+    <div class="key-value" id="keyDisplay">—</div>
+  </div>
+
+  <button class="copy-btn" id="copyBtn" onclick="copyKey()">
+    <span class="btn-text" id="btnText">Copy Key</span>
+  </button>
+
+  <div class="note" id="keyNote">
+    <strong>How to use:</strong> Copy the key above and paste it on the main page to gain access.
+  </div>
+</div>
+
+<script>
+  // Read the 3-digit key from the URL
+  // Works for: key.blog.com/738  OR  anything.com/738
+  function getKeyFromURL() {
+    // Check path segments first — e.g. /738
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    for (const part of parts) {
+      if (/^\d{3}$/.test(part)) return part;
+    }
+
+    // Check subdomain — e.g. 738.key.blog.com
+    const hostParts = window.location.hostname.split('.');
+    for (const part of hostParts) {
+      if (/^\d{3}$/.test(part)) return part;
+    }
+
+    // Check hash — e.g. key.blog.com#738
+    const hash = window.location.hash.replace('#', '');
+    if (/^\d{3}$/.test(hash)) return hash;
+
+    return null;
+  }
+
+  const key = getKeyFromURL();
+  const display = document.getElementById('keyDisplay');
+  const btn = document.getElementById('copyBtn');
+  const note = document.getElementById('keyNote');
+
+  if (key) {
+    display.textContent = key;
+    btn.disabled = false;
+  } else {
+    display.textContent = 'No key in URL';
+    display.style.fontSize = '1rem';
+    display.style.color = 'var(--muted)';
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+    btn.style.cursor = 'not-allowed';
+    note.innerHTML = '<strong>Usage:</strong> Add your 3-digit key to the URL — e.g. <code style="color:var(--accent)">key.blog.com/738</code>';
+  }
+
+  function copyKey() {
+    if (!key) return;
+    navigator.clipboard.writeText(key).then(() => {
+      const btn = document.getElementById('copyBtn');
+      const txt = document.getElementById('btnText');
+      btn.classList.add('copied');
+      txt.textContent = '✓ Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        txt.textContent = 'Copy Key';
+      }, 2000);
+    }).catch(() => {
+      // Fallback for older browsers
+      const el = document.createElement('textarea');
+      el.value = key;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      const txt = document.getElementById('btnText');
+      txt.textContent = '✓ Copied!';
+      setTimeout(() => txt.textContent = 'Copy Key', 2000);
+    });
+  }
+</script>
+</body>
+</html>
